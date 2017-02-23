@@ -61,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
             case PERMISSIONS_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getContentsInfo();
-                }else {
-                    ;
+                }
                 break;
             default:
                 break;
