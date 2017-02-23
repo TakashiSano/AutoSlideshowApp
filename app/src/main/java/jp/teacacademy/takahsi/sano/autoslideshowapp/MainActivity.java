@@ -39,6 +39,38 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+  // Android 6.0以降の場合
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // パーミッションの許可状態を確認する
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                // 許可されている
+                getContentsInfo();
+            } else {
+                // 許可されていないので許可ダイアログを表示する
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_CODE);
+            }
+            // Android 5系以下の場合
+        } else {
+            getContentsInfo();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getContentsInfo();
+                }else {
+                    ;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void getContentsInfo() {
+
         ContentResolver resolver = getContentResolver();
         cursor = resolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, // データの種類
@@ -47,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 null, // フィルタ用パラメータ
                 null // ソート (null ソートなし)
         );
+
+
+
         if (cursor.moveToFirst()) {
             int fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID);
             Long id = cursor.getLong(fieldIndex);
@@ -61,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
         mButton3 = (Button) findViewById(R.id.button3);
 
 
-
-        mButton1.setOnClickListener(new View.OnClickListener() {
+    mButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (cursor.moveToNext()){
