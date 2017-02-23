@@ -11,10 +11,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -60,13 +61,21 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //許可された
                     getContentsInfo();
+                }else{
+                    //許可されなかった
+                    showAlertDialog(1);
                 }
                 break;
             default:
                 break;
         }
     }
+
+    private void showAlertDialog(int i) {
+    }
+
 
     private void getContentsInfo() {
 
